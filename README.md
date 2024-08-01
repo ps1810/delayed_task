@@ -15,10 +15,10 @@ Instructions for setting up your project. For example:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/project-name.git
+git clone https://github.com/ps1810/delayed_task
 
 # Navigate to the project directory
-cd delayed-task
+cd delayed_task
 
 # Run the docker compose file
 docker compose up
