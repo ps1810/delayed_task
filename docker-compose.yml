@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ---------- using gunicorn to deploy the app with 4 uvicorn workers ----------
+    command: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
+    env_file:
+      - ./src/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    volumes:
+      - ./src/app:/code/app
+      - ./src/.env:/code/.env
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: arq app.core.worker.settings.WorkerSettings
+    env_file:
+      - ./src/.env
+    depends_on:
+      - redis
+    volumes:
+      - ./src/app:/code/app
+      - ./src/.env:/code/.env
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    expose:
+      - "6379"
+
+  pytest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./src/.env
+    depends_on:
+      - redis
+      - worker
+    command: python -m pytest ./tests
+    volumes:
+      - .:/code
+
+volumes:
+  redis-data:
