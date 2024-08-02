@@ -6,11 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
     # ---------- using gunicorn to deploy the app with 4 uvicorn workers ----------
-    command: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
+    command: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8080
     env_file:
       - ./src/.env
     ports:
-      - "8000:8000"
+      - "8080:8080"
     depends_on:
       - redis
     volumes:
@@ -35,7 +35,7 @@ services:
     volumes:
       - redis-data:/data
     expose:
-      - "6379"
+      - "6379:6379"
 
   pytest:
     build:

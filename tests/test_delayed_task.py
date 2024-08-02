@@ -18,7 +18,6 @@ def test_post_task(client: TestClient) -> None:
         "/api/v1/timer",
         json=test_input
     )
-    print(response.json(), flush=True)
     assert response.status_code == status.HTTP_201_CREATED
 
     response_data = response.json()
@@ -58,3 +57,70 @@ def test_post_task_with_wrong_url(client: TestClient) -> None:
 
     response_data = response.json()
     assert response_data["detail"] == "Invalid URL"
+
+
+def test_negative_hours_in_post_request(client: TestClient) -> None:
+    """
+    To test if negative hours is accepted in the request
+    """
+    test_input = generators.create_negative_hours_request()
+    response = client.post(
+        "/api/v1/timer",
+        json=test_input
+    )
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    response_data = response.json()
+    print(response_data["detail"], flush=True)
+    assert response_data["detail"][0]["msg"] == "Value error, Value should be greater than 0"
+    assert response_data["detail"][0]["loc"][1] == "hours"
+
+def test_negative_minutes_in_post_request(client: TestClient) -> None:
+    """
+    To test if negative hours is accepted in the request
+    """
+    test_input = generators.create_negative_minutes_request()
+    response = client.post(
+        "/api/v1/timer",
+        json=test_input
+    )
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    response_data = response.json()
+    assert response_data["detail"][0]["msg"] == "Value error, Value should be greater than 0"
+    assert response_data["detail"][0]["loc"][1] == "minutes"
+
+def test_negative_seconds_in_post_request(client: TestClient) -> None:
+    """
+    To test if negative hours is accepted in the request
+    """
+    test_input = generators.create_negative_seconds_request()
+    response = client.post(
+        "/api/v1/timer",
+        json=test_input
+    )
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    response_data = response.json()
+    assert response_data["detail"][0]["msg"] == "Value error, Value should be greater than 0"
+    assert response_data["detail"][0]["loc"][1] == "seconds"
+
+def test_negative_all_time_in_post_request(client: TestClient) -> None:
+    """
+    To test if negative hours is accepted in the request
+    """
+    test_input = generators.create_time_negative_request()
+    response = client.post(
+        "/api/v1/timer",
+        json=test_input
+    )
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    response_data = response.json()
+    assert len(response_data["detail"]) == 3
+    assert response_data["detail"][0]["msg"] == "Value error, Value should be greater than 0"
+    assert response_data["detail"][0]["loc"][1] == "hours"
+    assert response_data["detail"][1]["msg"] == "Value error, Value should be greater than 0"
+    assert response_data["detail"][1]["loc"][1] == "minutes"
+    assert response_data["detail"][2]["msg"] == "Value error, Value should be greater than 0"
+    assert response_data["detail"][2]["loc"][1] == "seconds"

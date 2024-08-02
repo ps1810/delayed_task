@@ -32,8 +32,11 @@ The project is a Python application built using FastAPI. To manage tasks, it emp
 
 There are 2 API's. One API adds task and the other API returns the remaining time to run the task.
 
+### Base URL
+The base URL for all endpoints is: http://localhost:8080
+
 #### 1. Create Task
-- **URL**: `/timer`
+- **URL**: `/api/v1/timer`
 - **Method**: `POST`
 - **Request Body**:
   - `hours` (int): Number of hours after which task will run. (Required)
@@ -52,7 +55,7 @@ There are 2 API's. One API adds task and the other API returns the remaining tim
 ```
 
 #### 2. Get Task information
-- **URL**: `/timer/<task_id>`
+- **URL**: `/api/v1/timer/<task_id>`
 - **Method**: `GET`
 - **Response**:
   - `200 OK`: Task information retrieved
@@ -63,13 +66,13 @@ There are 2 API's. One API adds task and the other API returns the remaining tim
   "id": "5264ca0402144d18bc94a8adb5d9b9a3",
   "time_left": 28
 }
-
+```
+This response will come if the task's timer is expired.
+```json
 {
   "id": "5264ca0402144d18bc94a8adb5d9b9a3",
   "time_left": 0
 }
-This response will come if the task is already fired and result is stored.
-
 ```
 
 ## Points to Remember

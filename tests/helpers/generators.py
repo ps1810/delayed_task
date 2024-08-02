@@ -24,3 +24,51 @@ def create_invalid_url_timer_request() -> dict:
         "url":"https://www/google.com"
     }
     return _request
+
+def create_negative_hours_request() -> dict:
+    """
+    Creating the request body for /timer api with invalid url
+    :return: request body in dict
+    """
+    _request = {"hours":-1,
+        "minutes":1,
+        "seconds":1,
+        "url":"https://www.google.com"
+    }
+    return _request
+
+def create_negative_minutes_request() -> dict:
+    """
+    Creating the request body for /timer api with invalid url
+    :return: request body in dict
+    """
+    _request = {"hours":1,
+        "minutes":-1,
+        "seconds":1,
+        "url":"https://www.google.com"
+    }
+    return _request
+
+def create_negative_seconds_request() -> dict:
+    """
+    Creating the request body for /timer api with invalid url
+    :return: request body in dict
+    """
+    _request = {"hours":1,
+        "minutes":1,
+        "seconds":-1,
+        "url":"https://www.google.com"
+    }
+    return _request
+
+def create_time_negative_request() -> dict:
+    """
+    Creating the request body for /timer api with invalid url
+    :return: request body in dict
+    """
+    _request = {"hours":-1,
+        "minutes":-1,
+        "seconds":-1,
+        "url":"https://www.google.com"
+    }
+    return _request

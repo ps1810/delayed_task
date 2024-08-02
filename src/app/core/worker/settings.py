@@ -17,3 +17,4 @@ class WorkerSettings:
     on_shutdown = shutdown
     handle_signals = False
     keep_result = 10
+    queue_name = "delayed_task"

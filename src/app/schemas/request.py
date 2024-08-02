@@ -3,7 +3,9 @@ from pydantic.functional_validators import AfterValidator
 from typing import Annotated
 import re
 from ..exceptions.custom_exceptions import ModelValidationError
+from ..core.utils.logger import get_logger
 
+logger = get_logger(__name__)
 
 def url_validator(url) -> str:
     """
@@ -21,13 +23,28 @@ def url_validator(url) -> str:
     return url
 
 
+def check_negative(value) -> int:
+    """
+    The function validates if hours, mintues and seconds are greater than 0
+    :param value: it can be hours, minutes or seconds
+    :type int
+
+    :rtype: int
+    :return: return the value if it is greater than or equal to 0
+    """
+    if value < 0:
+        logger.error(f"Value is negative")
+        raise ValueError("Value should be greater than 0")
+    return value
+
+
 class TimerRequest(BaseModel):
     """
     Request model for API's
     """
-    hours: int
-    minutes: int
-    seconds: int
+    hours: Annotated[int, AfterValidator(check_negative)]
+    minutes: Annotated[int, AfterValidator(check_negative)]
+    seconds: Annotated[int, AfterValidator(check_negative)]
     url: Annotated[str, AfterValidator(url_validator)]
 
 
